@@ -87,10 +87,6 @@ function createPopup(array, event) {
 
 function replaceText(event, replacmentText) {
     event.target.value = replacmentText
-    console.log(element.value)
-
-    console.log(element);
-
 
     // const element = document.querySelector(`${tagName}.${className}`)
     // console.log(element);

@@ -1,0 +1,13 @@
+.extensionPopup {
+    position: absolute;
+    margin: 0 50%;
+    z-index: 1000;
+    list-style-type: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: hidden;
+}
+.extensionPopup::-ms-expand {
+    display: none;
+}

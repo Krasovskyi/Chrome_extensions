@@ -51,7 +51,7 @@ function searchMatches(word, event) {
         if (word === key) {
             console.log(dictionary[key])
             createPopup(dictionary[key], event)
-            break
+            return
         }
     }
     text = ''
@@ -78,6 +78,9 @@ function createPopup(array, event) {
     popup.addEventListener('keypress', e => {
         if (e.key === 'Enter' || e.key === ' ') {
             replaceText(event, userValueSelected)
+            text = ''
+            popup.remove()
+            event.target.focus()
         }
     })
 
@@ -86,14 +89,29 @@ function createPopup(array, event) {
 }
 
 function replaceText(event, replacmentText) {
-    event.target.value = replacmentText
+    let elementText = ''
 
-    // const element = document.querySelector(`${tagName}.${className}`)
-    // console.log(element);
-    // if (!event.target.className) {
-    //     event.target.innerText = ''
-    // }
-    console.log('we are in replcaText function')
+    const replaceAndConcat =  () => {
+        let firstPartTextSlice = elementText.slice(0, caretPosition - text.length)
+        let secondPartTextSlice = elementText.slice(caretPosition - text.length)
+
+        secondPartTextSlice = secondPartTextSlice.replace(text, replacmentText)
+
+        return firstPartTextSlice + secondPartTextSlice
+    }
+
+    if (event.target.localName === 'input') {
+        elementText = event.target.value
+
+        event.target.value = replaceAndConcat()
+
+    } else {
+        elementText = event.target.textContent
+
+        event.target.textContent = replaceAndConcat()
+    }
+
+
 }
 
 // Функция получения текущего положения каретки.

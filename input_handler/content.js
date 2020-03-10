@@ -10,10 +10,10 @@ let caretPosition = 0
 document.addEventListener('input', inputHandler)
 
 
-// Функция обработки input элемента
+/*Функция обработки input элемента*/
 
 function inputHandler(event) {
-
+    console.log(text)
     if (event.data === ' ') {
 
         searchMatches(text, event)
@@ -23,13 +23,13 @@ function inputHandler(event) {
         text = text.slice(0, -1)
         console.log("text is " + text)
 
-    } else if (event.data !== undefined) {
+    } else if (event.data !== undefined && event.data !== null) {
 
         text += event.data
         console.log(event)
 
-        if (event.target.tagName === 'INPUT') {
-
+        /*для элементов , у которых есть свойство value*/
+        if (event.target.value || event.target.value === '') {
             caretPosition = event.target.selectionStart
             console.log(caretPosition)
 
@@ -40,11 +40,10 @@ function inputHandler(event) {
 
         }
         console.log("text is " + text)
-        console.log(event.data)
     }
 }
 
-// Функция проверки совпадения слова в словаре
+/*Функция проверки совпадения слова в словаре*/
 
 function searchMatches(word, event) {
     for (let key in dictionary) {
@@ -57,11 +56,11 @@ function searchMatches(word, event) {
     text = ''
 }
 
-// Функция вызывается в случае нахождения слова в словаре. Создаёт окошко с опциями по замене слова.
+/*Функция вызывается в случае нахождения слова в словаре. Создаёт окошко с опциями по замене слова.*/
 
 function createPopup(array, event) {
     let userValueSelected = ''
-
+    let element = event.target
     const popup = document.createElement('select')
     popup.className = 'extensionPopup'
     popup.setAttribute('size', array.length)
@@ -70,70 +69,102 @@ function createPopup(array, event) {
     array.forEach(item => {
         popup.insertAdjacentHTML("beforeend", `<option value="${item}">${item}</option>`)
     })
-    event.target.before(popup)
 
-    popup.addEventListener('change', e => {
+    element.before(popup)
+
+    // let popupHeight = popup.offsetHeight
+    // popup.style.top = `-${popupHeight}px`
+
+
+    popup.onchange = e => {
         userValueSelected = e.target.value
-    })
-    popup.addEventListener('keypress', e => {
+    }
+    popup.onclick = e => {
+
+    }
+    popup.onkeypress = e => {
         if (e.key === 'Enter' || e.key === ' ') {
             replaceText(event, userValueSelected)
-            text = ''
+            popup.onblur = null
             popup.remove()
-            event.target.focus()
+            focus(element)
+            text = ''
         }
-    })
+    }
+    popup.onblur = e => {
+        popup.onkeypress = null
+        popup.remove()
+        focus(element)
+        text = ''
+    }
 
+
+    popup.options[0].selected = true;
     popup.options[0].selected = true;
     popup.focus()
 }
 
-function replaceText(event, replacmentText) {
+function replaceText(event, replacementText) {
     let elementText = ''
 
-    const replaceAndConcat =  () => {
+    const replaceAndConcat = () => {
         let firstPartTextSlice = elementText.slice(0, caretPosition - text.length)
         let secondPartTextSlice = elementText.slice(caretPosition - text.length)
 
-        secondPartTextSlice = secondPartTextSlice.replace(text, replacmentText)
+        secondPartTextSlice = secondPartTextSlice.replace(text, replacementText)
 
         return firstPartTextSlice + secondPartTextSlice
     }
 
-    if (event.target.localName === 'input') {
+    if (event.target.value || event.target.value === '') {
         elementText = event.target.value
-
         event.target.value = replaceAndConcat()
 
     } else {
         elementText = event.target.textContent
-
         event.target.textContent = replaceAndConcat()
     }
-
-
 }
 
-// Функция получения текущего положения каретки.
-// Так как у contenteditable элментов нету возможнсти получить текущее положение каретки,
-// то нужно создать такую возможность самому.
+/*Функция получения текущего положения каретки.
+Так как у contenteditable элментов нету возможнсти получить текущее положение каретки,
+то нужно создать такую возможность самому. Позиция каретки нужна для замены слова в поле ввода
+для другой функции.*/
 
 function getCaretCharOffset(element) {
     let caretOffset = 0;
 
     if (window.getSelection) {
-        let range = window.getSelection().getRangeAt(0);
-        let preCaretRange = range.cloneRange();
-        preCaretRange.selectNodeContents(element);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        caretOffset = preCaretRange.toString().length;
+        let range = window.getSelection().getRangeAt(0)
+        let preCaretRange = range.cloneRange()
+        preCaretRange.selectNodeContents(element)
+        preCaretRange.setEnd(range.endContainer, range.endOffset)
+        caretOffset = preCaretRange.toString().length
     } else if (document.selection && (document.selection.type != "Control")) {
-        let textRange = document.selection.createRange();
-        let preCaretTextRange = document.body.createTextRange();
-        preCaretTextRange.moveToElementText(element);
-        preCaretTextRange.setEndPoint("EndToEnd", textRange);
-        caretOffset = preCaretTextRange.text.length;
+        let textRange = document.selection.createRange()
+        let preCaretTextRange = document.body.createTextRange()
+        preCaretTextRange.moveToElementText(element)
+        preCaretTextRange.setEndPoint("EndToEnd", textRange)
+        caretOffset = preCaretTextRange.text.length
     }
 
-    return caretOffset;
+    return caretOffset
 }
+
+
+/*возврат фокуса в том месте, где закончили писать
+            Не работает у Contenteditable elements: у таких элементов фокус происходит в конец/начало
+            строки, в зависимости от браузера. Есть возможность решить эту проблему, написав
+            свой собственный функционал для таких элементов, но для данного задания
+            это лишний код.*/
+function focus(element) {
+    if (element.selectionStart || element.selectionStart == '0') {
+        // Firefox/Chrome
+        element.selectionStart = caretPosition;
+        element.selectionEnd = caretPosition;
+        element.focus();
+    } else {
+        element.focus()
+    }
+}
+

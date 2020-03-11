@@ -4,8 +4,9 @@ const dictionary = {
     "heldp": ["help", "held", "hello"]
 }
 
-let text = ''
-let caretPosition = 0
+let text = '',
+    caretPosition,
+    caretYPosition
 
 document.addEventListener('input', inputHandler)
 
@@ -28,16 +29,20 @@ function inputHandler(event) {
         text += event.data
         console.log(event)
 
+
         /*для элементов , у которых есть свойство value*/
         if (event.target.value || event.target.value === '') {
             caretPosition = event.target.selectionStart
-            console.log(caretPosition)
+
+            caretYPosition = getCaretXYCoordinates(event.target, caretPosition).leftPosition
+            console.log(caretYPosition);
+            console.log("caret left position of input element is " + caretYPosition);
+            console.log("caret position of input element is " + caretPosition)
 
         } else {
-
             caretPosition = getCaretCharOffset(event.target)
-            console.log(caretPosition)
 
+            console.log('caret position of not input element is ' + getCaretCharOffset(event.target))
         }
         console.log("text is " + text)
     }
@@ -80,12 +85,18 @@ function createPopup(array, event) {
         userValueSelected = e.target.value
     }
     popup.onclick = e => {
-
+        replaceText(event, userValueSelected)
+        popup.onblur = null
+        popup.onkeypress = null
+        popup.remove()
+        focus(element)
+        text = ''
     }
     popup.onkeypress = e => {
         if (e.key === 'Enter' || e.key === ' ') {
             replaceText(event, userValueSelected)
             popup.onblur = null
+            popup.onclick = null
             popup.remove()
             focus(element)
             text = ''
@@ -93,14 +104,16 @@ function createPopup(array, event) {
     }
     popup.onblur = e => {
         popup.onkeypress = null
+        popup.onclick = null
         popup.remove()
         focus(element)
         text = ''
     }
 
+    popup.style.left = caretYPosition === undefined ? `50%` : `${caretYPosition}px`
 
-    popup.options[0].selected = true;
-    popup.options[0].selected = true;
+    popup.options[0].selected = true
+    popup.options[0].selected = true
     popup.focus()
 }
 

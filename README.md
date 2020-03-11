@@ -17,9 +17,9 @@ The Extension Management page can also be opened by clicking on the Chrome menu,
 3) Click the LOAD UNPACKED button and select the **input_handler** folder.
 
 ## Notes:
-Work properly when you add text inside existing text
-Be possible to continue typing in same location
-Work on all pages, with such elements (including e.g. iframes). 
+* Work properly when you add text inside existing text.
+* Be possible to continue typing in same location.
+* Work on all pages, with such elements (including e.g. iframes). 
 
 ## Dictionary (replacement options) for replacing:
 

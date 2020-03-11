@@ -7,6 +7,8 @@
     -webkit-appearance: none;
     appearance: none;
     overflow: hidden;
+    background-color: #9258ff;
+    padding: 5px;
 }
 .extensionPopup::-ms-expand {
     display: none;

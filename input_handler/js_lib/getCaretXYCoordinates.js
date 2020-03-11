@@ -1,9 +1,7 @@
 /* Main Function
     ----------------------------------------------- */
 function getCaretXYCoordinates(element, caretPosition){
-    console.log('We are in getCaretXYCoordinates function. caret char offset = ' + caretPosition)
     var coordinates = getCaretCoordinates(element, caretPosition);
-    console.log('caret coordinates is ' + coordinates.left)
     var elementCoordinates = getElementCoords(element);
     var topPosition = coordinates.top + elementCoordinates.top;
     var leftPosition = coordinates.left + elementCoordinates.left;

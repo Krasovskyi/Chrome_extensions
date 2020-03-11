@@ -14,7 +14,6 @@ document.addEventListener('input', inputHandler)
 /*Функция обработки input элемента*/
 
 function inputHandler(event) {
-    console.log(text)
     if (event.data === ' ') {
 
         searchMatches(text, event)
@@ -22,12 +21,10 @@ function inputHandler(event) {
     } else if (event.inputType === "deleteContentBackward") {
 
         text = text.slice(0, -1)
-        console.log("text is " + text)
 
     } else if (event.data !== undefined && event.data !== null) {
 
         text += event.data
-        console.log(event)
 
 
         /*для элементов , у которых есть свойство value*/
@@ -35,16 +32,11 @@ function inputHandler(event) {
             caretPosition = event.target.selectionStart
 
             caretYPosition = getCaretXYCoordinates(event.target, caretPosition).leftPosition
-            console.log(caretYPosition);
-            console.log("caret left position of input element is " + caretYPosition);
-            console.log("caret position of input element is " + caretPosition)
 
         } else {
             caretPosition = getCaretCharOffset(event.target)
 
-            console.log('caret position of not input element is ' + getCaretCharOffset(event.target))
         }
-        console.log("text is " + text)
     }
 }
 
@@ -53,7 +45,6 @@ function inputHandler(event) {
 function searchMatches(word, event) {
     for (let key in dictionary) {
         if (word === key) {
-            console.log(dictionary[key])
             createPopup(dictionary[key], event)
             return
         }

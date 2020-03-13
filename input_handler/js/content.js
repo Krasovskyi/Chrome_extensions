@@ -4,8 +4,14 @@ const dictionary = {
     "heldp": ["help", "held", "hello"],
     "foo": ["boo", "boo", "boo"],
     "boo": ["foo", "foo", "foo"],
-    "bar": ["help", "boo", "foo"]
+    "bar": ["help", "boo", "foo", "boo", "foo", "boo", "foo"]
 }
+
+const style = document.createElement('link');
+style.rel = 'stylesheet';
+style.type = 'text/css';
+style.href = chrome.extension.getURL('css/content.css');
+(document.head||document.documentElement).appendChild(style);
 
 let text = '',
     caretPosition = 0
@@ -48,13 +54,12 @@ function createPopup(array, event) {
     let element = event.target
 
     const popup = document.createElement('select')
-    popup.className = 'extensionPopup'
+    popup.id = 'extensionPopup'
     popup.setAttribute('size', array.length)
 
     array.forEach(item => {
         popup.insertAdjacentHTML("beforeend", `<option value="${item}">${item}</option>`)
     })
-
     //Для Contenteditable elements
     if (element.firstChild) {
         let firstChild = element.firstChild
@@ -63,10 +68,12 @@ function createPopup(array, event) {
         rng.setEnd(firstChild, caretPosition)
         rng.insertNode(popup)
     } else {
-        let caretXYCoordinates = getCaretXYCoordinates(element, caretPosition).leftPosition
-        popup.style.left = caretXYCoordinates + 'px'
-        element.after(popup)
+        let caretXYCoordinates = getCaretXYCoordinates(element, caretPosition)
+        popup.style.left = caretXYCoordinates.leftPosition + 'px'
+        popup.style.top = caretXYCoordinates.topPosition + 'px'
+        document.body.appendChild(popup)
     }
+
     popup.options[0].selected = true
     popup.focus()
 
@@ -91,12 +98,12 @@ function createPopup(array, event) {
             text = ''
         }
     }
-    popup.onblur = e => {
-        popup.onkeypress = null
-        popup.onclick = null
-        popup.remove()
-        text = ''
-    }
+    // popup.onblur = e => {
+    //     popup.onkeypress = null
+    //     popup.onclick = null
+    //     popup.remove()
+    //     text = ''
+    // }
 }
 
 function replaceText(event, replacementText) {

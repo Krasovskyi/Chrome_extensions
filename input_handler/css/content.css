@@ -1,14 +1,12 @@
-.extensionPopup {
-    position: absolute;
-    z-index: 9999999;
-    list-style-type: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    overflow: hidden;
-    padding: 4px;
-    opacity: .9;
+#extensionPopup {
+    position: absolute!important;
+    z-index: 9999999!important;
+    list-style-type: none!important;
+    appearance: none!important;
+    overflow: hidden!important;
+    padding: 4px!important;
+    opacity: .9!important;
 }
-.extensionPopup::-ms-expand {
-    display: none;
+#extensionPopup::-ms-expand {
+    display: none!important;
 }

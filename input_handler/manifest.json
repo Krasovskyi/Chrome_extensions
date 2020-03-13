@@ -22,5 +22,6 @@
   ],
   "permissions": [
     "tabs"
-  ]
+  ],
+  "web_accessible_resources": ["css/content.css"]
 }

@@ -16,8 +16,8 @@
     {
       "matches": ["<all_urls>"],
       "all_frames": true,
-      "css": ["content.css"],
-      "js": ["content.js", "js_lib/getCaretXYCoordinates.js"]
+      "css": ["css/content.css"],
+      "js": ["js/content.js", "js/getCaretXYCoordinates.js"]
     }
   ],
   "permissions": [

@@ -1,12 +1,11 @@
 #extensionPopup {
-    position: absolute!important;
-    z-index: 9999999!important;
-    list-style-type: none!important;
-    appearance: none!important;
-    overflow: hidden!important;
-    padding: 4px!important;
-    opacity: .9!important;
+    position: absolute !important;
+    z-index: 9999999 !important;
+    list-style-type: none !important;
+    overflow: hidden !important;
+    padding: 4px !important;
+    opacity: .9 !important;
 }
 #extensionPopup::-ms-expand {
-    display: none!important;
+    display: none !important;
 }

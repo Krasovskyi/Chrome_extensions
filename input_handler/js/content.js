@@ -98,12 +98,12 @@ function createPopup(array, event) {
             text = ''
         }
     }
-    // popup.onblur = e => {
-    //     popup.onkeypress = null
-    //     popup.onclick = null
-    //     popup.remove()
-    //     text = ''
-    // }
+    popup.onblur = e => {
+        popup.onkeypress = null
+        popup.onclick = null
+        popup.remove()
+        text = ''
+    }
 }
 
 function replaceText(event, replacementText) {
